@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamster Kombat</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA/4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREQAAAAAAEAAAEAAAAAEAAAABAAAAEAAAAAAQAAAQAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAP+AAAH/gAAB/4AAAf+AAAP/AAAB/4AAA/+AAAP/gAAD/4AAA/+AAAP/wAAD/8AAA//gAAP/4AAA/+AAAP/gAAD/4AA" type="image/x-icon">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <!-- Верхняя панель -->
+    <div id="top-stats">
+        <div id="level-info">
+            <span>GOLD 1/10</span>
+            <div id="level-progress"></div>
+            <span id="profit-per-hour">0</span>
+        </div>
+        <button id="settings-button" onclick="showOther()">⚙️</button>
+    </div>
+
+    <!-- Вкладки -->
+    <div id="tabs" class="nav-bar">
+        <button class="tab-button active" onclick="showTab('exchange')">Биржа</button>
+        <button class="tab-button" onclick="showTab('mine')">Майнинг</button>
+        <button class="tab-button" onclick="showTab('friends')">Друзья</button>
+        <button class="tab-button" onclick="showTab('earn')">Заработок</button>
+        <button class="tab-button" onclick="showTab('airdrop')">Эйрдроп</button>
+    </div>
+
+    <!-- Основной контент -->
+    <div id="main-content">
+        <button class="back-button hk-button" onclick="goBack()" style="display: none;">Назад ⬅️</button>
+        <div id="tap-container">
+            <div id="tap-button">
+                <span>😈</span>
+                <div id="energy-counter">100/100</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Нижняя панель -->
+    <div id="bottom-bar" class="nav-bar">
+        <div style="display: flex; flex: 1;">
+            <button class="nav-button active" data-action="showMain">
+                <span>Биржа</span>
+            </button>
+            <button class="nav-button" data-action="showGames">
+                <span>Казино</span>
+            </button>
+            <button class="nav-button" data-action="showRewards">
+                <span>Награды</span>
+            </button>
+            <button class="nav-button" data-action="showFriends">
+                <span>Друзья</span>
+            </button>
+            <button class="nav-button" data-action="showBonuses">
+                <span>Бонусы 🎁</span>
+            </button>
+        </div>
+        <div style="display: flex; flex: 1; justify-content: flex-end;">
+            <button class="nav-button" data-action="showBoosts">
+                <span>Буст</span>
+            </button>
+            <button class="nav-button" data-action="showAdminPanel">
+                <span>Админ</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="ui-main.js"></script>
+    <script src="game-mini.js"></script>
+    <script src="settings.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isTelegram = window.Telegram && window.Telegram.WebApp;
+            if (isTelegram) {
+                try {
+                    window.Telegram.WebApp.ready();
+                    window.Telegram.WebApp.expand();
+                    window.Telegram.WebApp.setHeaderColor({ color: '#1C2526' });
+                    window.Telegram.WebApp.setBottomBarColor({ color: '#1C2526' });
+                    window.Telegram.WebApp.requestTheme();
+                    window.Telegram.WebApp.requestViewport();
+                    window.Telegram.WebApp.requestSafeArea();
+                    window.Telegram.WebApp.requestContentSafeArea();
+                    const user = window.Telegram.WebApp.initDataUnsafe.user;
+                    window.profile.username = user ? (user.username || user.first_name || 'Аноним') : 'Аноним';
+                    window.showNotification(`Привет, ${window.profile.username}! Добро пожаловать! 😈`);
+                } catch (e) {
+                    console.error('Ошибка при вызове метода Telegram API:', e);
+                    window.profile.username = 'Аноним';
+                    window.showNotification('Привет, Аноним! Добро пожаловать! 😈');
+                }
+            } else {
+                console.warn('Telegram WebApp SDK не загружен. Запуск в режиме без Telegram.');
+                window.profile.username = 'Аноним';
+                window.showNotification('Привет, Аноним! Добро пожаловать! 😈');
+            }
+
+            loadProfile();
+            updateProfile();
+            applyTheme();
+
+            document.getElementById('tap-button').addEventListener('click', window.clickTapButton);
+
+            function bindNavEvents() {
+                document.querySelectorAll('.nav-button').forEach(button => {
+                    button.removeEventListener('click', handleNavClick);
+                    button.addEventListener('click', handleNavClick);
+                });
+            }
+
+            function handleNavClick(event) {
+                const action = event.currentTarget.getAttribute('data-action');
+                document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+                if (action && window[action]) {
+                    window[action]();
+                } else {
+                    console.error(`Function ${action} is not defined.`);
+                }
+            }
+
+            bindNavEvents();
+
+            window.goBack = function() {
+                if (historyStack.length > 1) {
+                    historyStack.pop();
+                    const lastSection = historyStack[historyStack.length - 1];
+                    if (lastSection === 'main') {
+                        showMain();
+                    } else if (window[lastSection]) {
+                        window[lastSection]();
+                    }
+                } else {
+                    showMain();
+                }
+            };
+
+            setInterval(updateEnergy, 100);
+        });
+    </script>
+</body>
+</html>

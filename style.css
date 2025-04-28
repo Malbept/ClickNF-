@@ -1,0 +1,390 @@
+/* Базовые стили */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #ffffff;
+    background: linear-gradient(180deg, #1C2526 0%, #000000 100%);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Верхняя панель со статистикой */
+#top-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: rgba(42, 52, 53, 0.8);
+    border-bottom: 1px solid #3A4445;
+}
+
+/* Кнопка настроек */
+#settings-button {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+#settings-button:hover {
+    color: #FF8C00;
+}
+
+/* Основной контент */
+#main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Контейнер для тапа */
+#tap-container {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Кнопка тапа */
+#tap-button {
+    width: 27.5vh;
+    height: 27.5vh;
+    background: radial-gradient(circle, rgba(255, 140, 0, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    animation: ringPulse 2s infinite ease-in-out;
+    position: relative;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+#tap-button:focus {
+    outline: none;
+}
+#tap-button span {
+    display: inline-block;
+    font-size: 16.5vh;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+}
+#tap-button:active {
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.5) 0%, transparent 70%);
+}
+@keyframes ringPulse {
+    0% { box-shadow: 0 0 20px rgba(255, 140, 0, 0.5); }
+    50% { box-shadow: 0 0 30px rgba(255, 140, 0, 0.7); }
+    100% { box-shadow: 0 0 20px rgba(255, 140, 0, 0.5); }
+}
+
+/* Счетчик энергии под кнопкой тапа */
+#energy-counter {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(42, 52, 53, 0.8);
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #FFD700;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+#energy-counter::before {
+    content: '⚡';
+    font-size: 14px;
+}
+
+/* Плавающие монетки */
+.tap-animation {
+    position: absolute;
+    font-size: 18px;
+    color: #FFD700;
+    animation: floatTap 1s ease-out forwards;
+    pointer-events: none;
+}
+@keyframes floatTap {
+    0% { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(0, -50px) scale(1.5); }
+}
+
+/* Счетчик монет */
+#coin-counter {
+    font-size: 36px;
+    font-weight: 700;
+    color: #FFD700;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+}
+#coin-counter::before {
+    content: '💰';
+    font-size: 32px;
+}
+
+/* Уровень и прибыль */
+#level-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: #2A3435;
+    border-radius: 8px;
+    margin: 5px;
+}
+#level-info span {
+    font-size: 12px;
+    color: #FFD700;
+    font-weight: 700;
+}
+#profit-per-hour {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+#profit-per-hour::before {
+    content: '📈';
+    font-size: 18px;
+}
+#level-progress {
+    width: 80px;
+    height: 6px;
+    background: #3A4445;
+    border-radius: 3px;
+    margin: 0 10px;
+    position: relative;
+}
+#level-progress::before {
+    content: '';
+    position: absolute;
+    width: 30%;
+    height: 100%;
+    background: #FF8C00;
+    border-radius: 3px;
+}
+
+/* Вкладки */
+#tabs {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(42, 52, 53, 0.8);
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.tab-button {
+    background: #3A4445;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+.tab-button.active {
+    background: #FF8C00;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+/* Улучшения */
+.upgrade {
+    background: linear-gradient(180deg, #2A3435 0%, #1C2526 100%);
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.upgrade-icon {
+    font-size: 40px;
+}
+.upgrade-info {
+    flex: 1;
+}
+.upgrade-info p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+.upgrade-info p:first-child {
+    font-weight: 700;
+}
+.upgrade-button {
+    background: linear-gradient(180deg, #FF8C00, #FFD700);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.upgrade-button.disabled {
+    background: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.upgrade-button:not(.disabled):hover {
+    background: linear-gradient(180deg, #FFA500, #FFE066);
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+.upgrade-button:active {
+    transform: scale(0.95);
+}
+
+/* Панели навигации */
+.nav-bar {
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    background: rgba(42, 52, 53, 0.8);
+    border-radius: 8px;
+    margin: 5px;
+}
+#bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1C2526;
+    border-top: 1px solid #3A4445;
+    padding: 10px 15px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+/* Кнопки */
+.hk-button {
+    background: linear-gradient(180deg, #FF8C00, #FFD700);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.hk-button:hover {
+    background: linear-gradient(180deg, #FFA500, #FFE066);
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+.hk-button:active {
+    transform: scale(0.95);
+}
+.back-button {
+    display: block;
+    margin: 10px auto;
+}
+
+/* Кнопки нижней панели */
+.nav-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 9px;
+    cursor: pointer;
+    padding: 5px;
+    flex: 1;
+}
+.nav-button.active {
+    color: #FF8C00;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+.nav-button span::before {
+    display: block;
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+.nav-button[data-action="showMain"] span::before { content: '🏦'; }
+.nav-button[data-action="showGames"] span::before { content: '🎰'; }
+.nav-button[data-action="showRewards"] span::before { content: '🎁'; }
+.nav-button[data-action="showFriends"] span::before { content: '👥'; }
+.nav-button[data-action="showBonuses"] span::before { content: '🎁'; }
+.nav-button[data-action="showBoosts"] span::before { content: '🚀'; }
+.nav-button[data-action="showAdminPanel"] span::before { content: '🔧'; }
+.nav-button.active span::before {
+    text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2A3435;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    animation: fadeInOut 3s forwards;
+}
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Адаптивность для разных устройств */
+@media (max-width: 600px) {
+    #tap-button { width: 27.5vh; height: 27.5vh; }
+    #tap-button span { font-size: 16.5vh; }
+    #coin-counter { font-size: 32px; }
+    #coin-counter::before { font-size: 28px; }
+    #level-info { font-size: 10px; }
+    #profit-per-hour { font-size: 12px; }
+    .hk-button { font-size: 14px; padding: 8px 12px; }
+    .tab-button { font-size: 12px; padding: 6px 12px; }
+    .nav-button { font-size: 8px; }
+    .nav-button span::before { font-size: 30px; }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    #tap-button { width: 22vw; height: 22vw; }
+    #tap-button span { font-size: 13.2vw; }
+    #coin-counter { font-size: 40px; }
+    #level-info { font-size: 14px; }
+    #profit-per-hour { font-size: 16px; }
+    .nav-button { font-size: 10px; }
+    .nav-button span::before { font-size: 34px; }
+}
+
+@media (min-width: 1025px) {
+    #tap-button { width: 330px; height: 330px; }
+    #tap-button span { font-size: 198px; }
+    #coin-counter { font-size: 48px; }
+    #level-info { font-size: 16px; }
+    #profit-per-hour { font-size: 18px; }
+    .nav-button { font-size: 12px; }
+    .nav-button span::before { font-size: 38px; }
+}
