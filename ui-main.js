@@ -26,18 +26,19 @@ window.profile = {
     maxLevel: 10,
     profitPerHour: 0,
     upgrades: {
-        exchange: [{ name: 'Трейдер', level: 0, cost: 100, profitPerHour: 10 }],
-        mine: [{ name: 'Майнер', level: 0, cost: 150, profitPerHour: 15 }],
-        friends: [{ name: 'Реферал', level: 0, cost: 200, profitPerHour: 20 }],
-        earn: [{ name: 'Задание', level: 0, cost: 250, profitPerHour: 25 }],
-        airdrop: [{ name: 'Эйрдроп', level: 0, cost: 300, profitPerHour: 30 }]
+        exchange: [{ name: 'Трейдер', level: 0, cost: 1000, profitPerHour: 10 }],
+        mine: [{ name: 'Майнер', level: 0, cost: 1500, profitPerHour: 15 }],
+        friends: [{ name: 'Реферал', level: 0, cost: 2000, profitPerHour: 20 }],
+        earn: [{ name: 'Задание', level: 0, cost: 2500, profitPerHour: 25 }],
+        airdrop: [{ name: 'Эйрдроп', level: 0, cost: 3000, profitPerHour: 30 }]
     },
     theme: 'dark',
     stats: { clicker_games: 0 },
     event: null,
     xp: 0,
     clicks: 0,
-    claimedBonuses: []
+    claimedBonuses: [],
+    claimedPromoCodes: [] // Добавляем для хранения активированных промокодов
 };
 
 // Загрузка профиля из localStorage
@@ -70,10 +71,10 @@ window.updateProfile = function() {
         `;
     }
 
-    // Обновляем информацию в основном контенте (на главном экране и в разделах)
+    // Обновляем информацию в основном контенте (только на главном экране)
     const mainContent = document.getElementById('main-content');
     const profileDiv = mainContent.querySelector('.profile-info');
-    if (profileDiv) {
+    if (profileDiv && window.historyStack[window.historyStack.length - 1] === 'main') {
         profileDiv.innerHTML = `
             <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
             <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
@@ -134,10 +135,6 @@ window.showTab = function(tabName) {
                 <button class="upgrade-button hk-button ${window.profile.coins < upgrade.cost ? 'disabled' : ''}" onclick="buyUpgrade('${tabName}', ${index})">Купить за ${upgrade.cost.toLocaleString()}</button>
             </div>
         `).join('')}
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-        </div>
     `;
     window.historyStack.push(`showTab('${tabName}')`);
     window.updateProfile();
@@ -157,7 +154,7 @@ window.buyUpgrade = function(tabName, index) {
         window.profile.coins -= upgrade.cost;
         upgrade.level++;
         window.calculateProfitPerHour();
-        upgrade.cost = Math.floor(upgrade.cost * 1.5);
+        upgrade.cost = Math.floor(upgrade.cost * 2); // Увеличиваем цену в 2 раза
         window.showNotification(`Улучшение ${upgrade.name} куплено! +${upgrade.profitPerHour.toLocaleString()} к прибыли/ч 📈`);
         window.profile.xp += 50;
         window.checkLevelUp();
@@ -180,60 +177,12 @@ window.calculateProfitPerHour = function() {
     window.profile.profitPerHour = total;
 };
 
-// Раздел "Бонусы"
-window.showBonuses = function() {
-    document.getElementById('main-content').innerHTML = `
-        <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
-        <h2>Бонусы 🎁</h2>
-        <p>Введите код бонуса:</p>
-        <input type="text" id="bonusCode" placeholder="Код бонуса">
-        <button class="hk-button" onclick="claimBonusFromCode()">Залутать бонус</button>
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-        </div>
-    `;
-    window.historyStack.push('showBonuses');
-};
-
-window.claimBonusFromCode = function() {
-    const bonusId = document.getElementById('bonusCode').value;
-    const telegramUserId = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp.initDataUnsafe.user?.id || "test_user" : "test_user";
-    const result = window.claimBonus(bonusId, telegramUserId);
-    window.showNotification(result.message);
-};
-
-// Админ-панель
-window.showAdminPanel = function() {
-    document.getElementById('main-content').innerHTML = `
-        <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
-        <h2>Админ 🔧</h2>
-        <p>Создать бонус:</p>
-        <select id="bonusType">
-            <option value="coins">Монеты 💰</option>
-            <option value="energy">Энергия ⚡</option>
-            <option value="xp">XP 📈</option>
-        </select>
-        <input type="number" id="bonusAmount" placeholder="Количество" min="1">
-        <button class="hk-button" onclick="createBonus(document.getElementById('bonusType').value, parseInt(document.getElementById('bonusAmount').value))">Опубликовать бонус</button>
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-        </div>
-    `;
-    window.historyStack.push('showAdminPanel');
-};
-
 // Простые заглушки для навигации
 window.showGames = function() {
     document.getElementById('main-content').innerHTML = `
         <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
         <h2>Казино 🎰</h2>
         <p>Скоро здесь появятся игры!</p>
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-        </div>
     `;
     window.historyStack.push('showGames');
 };
@@ -243,10 +192,6 @@ window.showRewards = function() {
         <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
         <h2>Награды 🎁</h2>
         <p>Скоро здесь появятся награды!</p>
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-        </div>
     `;
     window.historyStack.push('showRewards');
 };
@@ -256,10 +201,6 @@ window.showFriends = function() {
         <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
         <h2>Друзья 👥</h2>
         <p>Приглашайте друзей и получайте бонусы!</p>
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-        </div>
     `;
     window.historyStack.push('showFriends');
 };
@@ -269,10 +210,6 @@ window.showBoosts = function() {
         <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
         <h2>Буст 🚀</h2>
         <p>Скоро здесь появятся бусты!</p>
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-        </div>
     `;
     window.historyStack.push('showBoosts');
 };

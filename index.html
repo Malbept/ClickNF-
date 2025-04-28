@@ -63,9 +63,6 @@
             <button class="nav-button" data-action="showBoosts">
                 <span>Буст</span>
             </button>
-            <button class="nav-button" data-action="showAdminPanel">
-                <span>Админ</span>
-            </button>
         </div>
     </div>
 
@@ -73,6 +70,8 @@
     <script src="ui-main.js"></script>
     <script src="game-mini.js"></script>
     <script src="settings.js"></script>
+    <script src="promocode.js"></script>
+    <script src="promo.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const isTelegram = window.Telegram && window.Telegram.WebApp;
@@ -140,7 +139,7 @@
                 }
             };
 
-            setInterval(updateEnergy, 100);
+            setInterval(updateEnergy, 3000); // Обновляем энергию каждые 3 секунды
         });
     </script>
 </body>

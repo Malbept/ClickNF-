@@ -5,79 +5,7 @@ window.achievements = [
     { id: 'level_5', name: 'Прогрессор', description: 'Достигни 5 уровня', condition: () => window.profile.level >= 5, reward: 100, completed: false },
 ];
 
-// Массив бонусов
-window.bonuses = [];
-
-// Функция для создания и публикации бонуса
-window.createBonus = function(rewardType, rewardAmount) {
-    const bonusId = Date.now().toString();
-    const bonus = {
-        id: bonusId,
-        type: rewardType,
-        amount: rewardAmount,
-        claimedBy: []
-    };
-    window.bonuses.push(bonus);
-
-    const botToken = "7234958924:AAHCz8bNVMTWzoDF0DEeUhXr6eoF57Vpcl0";
-    const chatId = "-1002648217133";
-    const message = `🎁 Новый бонус! Получи ${rewardAmount} ${rewardType === 'coins' ? 'монет 💰' : rewardType === 'energy' ? 'энергии ⚡' : 'XP 📈'}! Код: ${bonusId}`;
-
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            chat_id: chatId,
-            text: message,
-            parse_mode: "Markdown"
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.ok) {
-            window.showNotification(`Бонус опубликован! Код: ${bonusId}`);
-        } else {
-            window.showNotification("Ошибка при публикации бонуса!");
-            console.error("Ошибка:", data);
-        }
-    })
-    .catch(error => {
-        window.showNotification("Ошибка при отправке в Telegram!");
-        console.error("Ошибка:", error);
-    });
-
-    return bonusId;
-};
-
-// Функция для забора бонуса
-window.claimBonus = function(bonusId, telegramUserId) {
-    const bonus = window.bonuses.find(b => b.id === bonusId);
-    if (!bonus) {
-        return { success: false, message: "Бонус не найден!" };
-    }
-
-    if (window.profile.claimedBonuses.includes(bonusId)) {
-        return { success: false, message: "Ты уже забрал этот бонус!" };
-    }
-
-    if (bonus.type === 'coins') {
-        window.profile.coins += bonus.amount;
-    } else if (bonus.type === 'energy') {
-        window.profile.energy = Math.min(window.profile.energy + bonus.amount, window.profile.maxEnergy);
-    } else if (bonus.type === 'xp') {
-        window.profile.xp += bonus.amount;
-        window.checkLevelUp();
-    }
-
-    window.profile.claimedBonuses.push(bonusId);
-    bonus.claimedBy.push(telegramUserId);
-    window.updateProfile();
-    window.saveProfile();
-
-    return { success: true, message: `Бонус получен! +${bonus.amount} ${bonus.type === 'coins' ? 'монет 💰' : bonus.type === 'energy' ? 'энергии ⚡' : 'XP 📈'}` };
-};
-
-// Обновление энергии
+// Обновление энергии (восстанавливается 1 единица каждые 3 секунды)
 window.updateEnergy = function() {
     const maxEnergy = window.profile.energyUpgradeLevel > 0 ? window.profile.maxEnergyUpgraded : window.profile.maxEnergy;
     if (window.profile.energy < maxEnergy) {
@@ -130,22 +58,12 @@ window.playRockPaperScissors = function() {
         return;
     }
     window.profile.energy--;
-    const progress = Math.floor((window.profile.xp / (window.profile.level * 100)) * 100);
     document.getElementById('main-content').innerHTML = `
         <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
         <h2>Камень-Ножницы-Бумага ✊✂️📜</h2>
         <button class="action hk-button" onclick="playRPS('камень')">Камень ✊</button>
         <button class="action hk-button" onclick="playRPS('ножницы')">Ножницы ✂️</button>
         <button class="action hk-button" onclick="playRPS('бумага')">Бумага 📜</button>
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-            <div id="level-info">
-                <span>GOLD ${window.profile.level}/${window.profile.maxLevel}</span>
-                <div id="level-progress" style="width: ${progress}%;"></div>
-                <span id="profit-per-hour">${window.profile.profitPerHour.toLocaleString()}</span>
-            </div>
-        </div>
     `;
     window.historyStack.push('playRockPaperScissors');
 };
@@ -173,22 +91,12 @@ window.playRPS = function(playerChoice) {
         result = 'Проигрыш! 😿';
         window.profile.xp += 10;
     }
-    const progress = Math.floor((window.profile.xp / (window.profile.level * 100)) * 100);
     document.getElementById('main-content').innerHTML = `
         <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
         <h2>Камень-Ножницы-Бумага ✊✂️📜</h2>
         <p>Твой выбор: ${playerChoice}</p>
         <p>Выбор бота: ${botChoice}</p>
         <p>${result}</p>
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-            <div id="level-info">
-                <span>GOLD ${window.profile.level}/${window.profile.maxLevel}</span>
-                <div id="level-progress" style="width: ${progress}%;"></div>
-                <span id="profit-per-hour">${window.profile.profitPerHour.toLocaleString()}</span>
-            </div>
-        </div>
     `;
     window.checkLevelUp();
     window.updateProfile();
@@ -204,29 +112,18 @@ window.playGuessNumber = function() {
     }
     window.profile.energy--;
     const number = Math.floor(Math.random() * 10) + 1;
-    const progress = Math.floor((window.profile.xp / (window.profile.level * 100)) * 100);
     document.getElementById('main-content').innerHTML = `
         <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
         <h2>Угадай число 🔢</h2>
         <p>Угадай число от 1 до 10:</p>
         <input id="guessInput" type="number" min="1" max="10">
         <button class="action hk-button" onclick="guessNumber(${number})">Угадать</button>
-        <div class="profile-info">
-            <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-            <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-            <div id="level-info">
-                <span>GOLD ${window.profile.level}/${window.profile.maxLevel}</span>
-                <div id="level-progress" style="width: ${progress}%;"></div>
-                <span id="profit-per-hour">${window.profile.profitPerHour.toLocaleString()}</span>
-            </div>
-        </div>
     `;
     window.historyStack.push('playGuessNumber');
 };
 
 window.guessNumber = function(correctNumber) {
     const guess = parseInt(document.getElementById('guessInput').value);
-    const progress = Math.floor((window.profile.xp / (window.profile.level * 100)) * 100);
     if (guess === correctNumber) {
         const reward = Math.floor(75 * (1 + window.profile.level * 0.1));
         window.profile.coins += reward;
@@ -241,15 +138,6 @@ window.guessNumber = function(correctNumber) {
             <button class="back-button hk-button" onclick="goBack()">Назад ⬅️</button>
             <h2>Угадай число 🔢</h2>
             <p>Неправильно! Число было: ${correctNumber}</p>
-            <div class="profile-info">
-                <h1 id="coin-counter">${window.profile.coins.toLocaleString()}</h1>
-                <p>Мультитап: ${window.profile.multitapLevel}/${window.profile.maxMultitap} 👆</p>
-                <div id="level-info">
-                    <span>GOLD ${window.profile.level}/${window.profile.maxLevel}</span>
-                    <div id="level-progress" style="width: ${progress}%;"></div>
-                    <span id="profit-per-hour">${window.profile.profitPerHour.toLocaleString()}</span>
-                </div>
-            </div>
         `;
         window.checkLevelUp();
     }
