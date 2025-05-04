@@ -1,4 +1,5 @@
-/* Базовые стили */
+
+/* style.css */
 body {
     margin: 0;
     padding: 0;
@@ -11,7 +12,6 @@ body {
     overflow: hidden;
 }
 
-/* Верхняя панель со статистикой */
 #top-stats {
     display: flex;
     justify-content: space-between;
@@ -21,7 +21,14 @@ body {
     border-bottom: 1px solid #3A4445;
 }
 
-/* Кнопка настроек */
+#coin-counter-small {
+    font-size: 14px;
+    color: #FFD700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 #settings-button {
     background: none;
     border: none;
@@ -30,11 +37,11 @@ body {
     cursor: pointer;
     padding: 5px 10px;
 }
+
 #settings-button:hover {
     color: #FF8C00;
 }
 
-/* Основной контент */
 #main-content {
     flex: 1;
     overflow-y: auto;
@@ -46,14 +53,12 @@ body {
     align-items: center;
 }
 
-/* Контейнер для тапа */
 #tap-container {
     position: relative;
     text-align: center;
     margin-bottom: 20px;
 }
 
-/* Кнопка тапа */
 #tap-button {
     width: 27.5vh;
     height: 27.5vh;
@@ -68,25 +73,28 @@ body {
     outline: none;
     -webkit-tap-highlight-color: transparent;
 }
+
 #tap-button:focus {
     outline: none;
 }
+
 #tap-button span {
     display: inline-block;
     font-size: 16.5vh;
     line-height: 1;
     text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
 }
+
 #tap-button:active {
     background: radial-gradient(circle, rgba(255, 0, 0, 0.5) 0%, transparent 70%);
 }
+
 @keyframes ringPulse {
     0% { box-shadow: 0 0 20px rgba(255, 140, 0, 0.5); }
     50% { box-shadow: 0 0 30px rgba(255, 140, 0, 0.7); }
     100% { box-shadow: 0 0 20px rgba(255, 140, 0, 0.5); }
 }
 
-/* Счетчик энергии под кнопкой тапа */
 #energy-counter {
     position: absolute;
     bottom: -30px;
@@ -101,25 +109,26 @@ body {
     align-items: center;
     gap: 3px;
 }
+
 #energy-counter::before {
     content: '⚡';
     font-size: 14px;
 }
 
-/* Плавающие монетки */
 .tap-animation {
     position: absolute;
     font-size: 18px;
     color: #FFD700;
     animation: floatTap 1s ease-out forwards;
     pointer-events: none;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
 }
+
 @keyframes floatTap {
     0% { opacity: 1; transform: translate(0, 0) scale(1); }
     100% { opacity: 0; transform: translate(0, -50px) scale(1.5); }
 }
 
-/* Счетчик монет */
 #coin-counter {
     font-size: 36px;
     font-weight: 700;
@@ -131,12 +140,12 @@ body {
     gap: 5px;
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
 }
+
 #coin-counter::before {
     content: '💰';
     font-size: 32px;
 }
 
-/* Уровень и прибыль */
 #level-info {
     display: flex;
     justify-content: space-between;
@@ -146,21 +155,25 @@ body {
     border-radius: 8px;
     margin: 5px;
 }
+
 #level-info span {
     font-size: 12px;
     color: #FFD700;
     font-weight: 700;
 }
+
 #profit-per-hour {
     font-size: 14px;
     display: flex;
     align-items: center;
     gap: 5px;
 }
+
 #profit-per-hour::before {
     content: '📈';
     font-size: 18px;
 }
+
 #level-progress {
     width: 80px;
     height: 6px;
@@ -169,6 +182,7 @@ body {
     margin: 0 10px;
     position: relative;
 }
+
 #level-progress::before {
     content: '';
     position: absolute;
@@ -178,80 +192,6 @@ body {
     border-radius: 3px;
 }
 
-/* Вкладки */
-#tabs {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    background: rgba(42, 52, 53, 0.8);
-    overflow-x: auto;
-    white-space: nowrap;
-}
-.tab-button {
-    background: #3A4445;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-.tab-button.active {
-    background: #FF8C00;
-    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
-}
-
-/* Улучшения */
-.upgrade {
-    background: linear-gradient(180deg, #2A3435 0%, #1C2526 100%);
-    border-radius: 8px;
-    padding: 10px;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.upgrade-icon {
-    font-size: 40px;
-}
-.upgrade-info {
-    flex: 1;
-}
-.upgrade-info p {
-    margin: 5px 0;
-    font-size: 14px;
-}
-.upgrade-info p:first-child {
-    font-weight: 700;
-}
-.upgrade-button {
-    background: linear-gradient(180deg, #FF8C00, #FFD700);
-    border: none;
-    border-radius: 8px;
-    padding: 8px 12px;
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.upgrade-button.disabled {
-    background: #666;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-.upgrade-button:not(.disabled):hover {
-    background: linear-gradient(180deg, #FFA500, #FFE066);
-    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
-}
-.upgrade-button:active {
-    transform: scale(0.95);
-}
-
-/* Панели навигации */
 .nav-bar {
     display: flex;
     gap: 5px;
@@ -260,6 +200,7 @@ body {
     border-radius: 8px;
     margin: 5px;
 }
+
 #bottom-bar {
     position: fixed;
     bottom: 0;
@@ -277,7 +218,100 @@ body {
     border-top-right-radius: 20px;
 }
 
-/* Кнопки */
+.tab-button {
+    background: #3A4445;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    margin: 5px;
+}
+
+.tab-button.active {
+    background: #FF8C00;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+.shop-tabs, .game-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.upgrade-list, .quest-list {
+    width: 100%;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-bottom: 80px; /* Поднимаем контент над хот-баром */
+}
+
+.upgrade, .quest {
+    background: linear-gradient(180deg, #2A3435 0%, #1C2526 100%);
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: opacity 0.5s, transform 0.3s; /* Добавлено для анимации исчезновения */
+}
+
+.upgrade.completed, .quest.completed {
+    opacity: 0;
+    transform: translateY(20px); /* Анимация исчезновения */
+}
+
+.upgrade-icon {
+    font-size: 40px;
+}
+
+.upgrade-info, .quest-info {
+    flex: 1;
+}
+
+.upgrade-info p, .quest-info p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.upgrade-info p:first-child, .quest-info p:first-child {
+    font-weight: 700;
+}
+
+.upgrade-button {
+    background: linear-gradient(180deg, #FF8C00, #FFD700);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upgrade-button.disabled {
+    background: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.upgrade-button:not(.disabled):hover {
+    background: linear-gradient(180deg, #FFA500, #FFE066);
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+.upgrade-button:active {
+    transform: scale(0.95);
+}
+
 .hk-button {
     background: linear-gradient(180deg, #FF8C00, #FFD700);
     border: none;
@@ -290,19 +324,27 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
 }
+
 .hk-button:hover {
     background: linear-gradient(180deg, #FFA500, #FFE066);
     box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
 }
+
+.hk-button.disabled {
+    background: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 .hk-button:active {
     transform: scale(0.95);
 }
+
 .back-button {
     display: block;
     margin: 10px auto;
 }
 
-/* Кнопки нижней панели */
 .nav-button {
     display: flex;
     flex-direction: column;
@@ -312,30 +354,48 @@ body {
     color: #ffffff;
     font-size: 9px;
     cursor: pointer;
-    padding: 5px;
+    padding: 10px;
     flex: 1;
+    min-height: 60px;
+    min-width: 50px;
+    box-sizing: border-box;
 }
+
+.nav-button span {
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .nav-button.active {
     color: #FF8C00;
     box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
 }
+
 .nav-button span::before {
     display: block;
     font-size: 32px;
     margin-bottom: 5px;
 }
+
 .nav-button[data-action="showMain"] span::before { content: '🏦'; }
 .nav-button[data-action="showGames"] span::before { content: '🎰'; }
 .nav-button[data-action="showRewards"] span::before { content: '🎁'; }
+.nav-button[data-action="showQuests"] span::before { content: '📋'; }
 .nav-button[data-action="showFriends"] span::before { content: '👥'; }
 .nav-button[data-action="showBonuses"] span::before { content: '🎁'; }
+.nav-button[data-action="showShop"] span::before { content: '🏬'; }
 .nav-button[data-action="showBoosts"] span::before { content: '🚀'; }
-.nav-button[data-action="showAdminPanel"] span::before { content: '🔧'; }
+
 .nav-button.active span::before {
     text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
 }
 
-/* Уведомления */
+.nav-button[data-action="showQuests"] span::before {
+    font-size: 32px;
+}
+
 .notification {
     position: fixed;
     top: 20px;
@@ -348,6 +408,7 @@ body {
     z-index: 1000;
     animation: fadeInOut 3s forwards;
 }
+
 @keyframes fadeInOut {
     0% { opacity: 0; }
     10% { opacity: 1; }
@@ -355,8 +416,260 @@ body {
     100% { opacity: 0; }
 }
 
-/* Адаптивность для разных устройств */
+#shop-content, #game-content {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+}
+
+.blackjack-table, .roulette-table, .depim-arena {
+    background: #2A3435;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+    position: relative;
+    padding-bottom: 100px;
+}
+
+.bet-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.bet-section input, .bet-section select {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    background: #3A4445;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.cards-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.player-cards, .dealer-cards {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    width: 80px;
+    height: 120px;
+    background: #ffffff;
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.card.red { color: #FF0000; }
+.card.black { color: #000000; }
+
+.card.hidden {
+    background: linear-gradient(45deg, #3A4445, #2A3435);
+    color: #ffffff;
+    border: 2px solid #666;
+}
+
+.card::before, .card::after {
+    content: attr(data-value);
+    position: absolute;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.card::before {
+    top: 5px;
+    left: 5px;
+}
+
+.card::after {
+    bottom: 5px;
+    right: 5px;
+    transform: rotate(180deg);
+}
+
+.card.deal {
+    animation: dealCard 0.5s ease-out;
+}
+
+@keyframes dealCard {
+    0% { transform: translateY(-100px) rotate(10deg); opacity: 0; }
+    100% { transform: translateY(0) rotate(0); opacity: 1; }
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.roulette-wheel {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, #FF8C00, #FFD700);
+    border-radius: 50%;
+    margin: 20px auto;
+    position: relative;
+    transition: transform 2s ease-out;
+}
+
+.roulette-wheel.spinning {
+    transform: rotate(720deg);
+}
+
+.wheel-inner {
+    width: 80%;
+    height: 80%;
+    background: #2A3435;
+    border-radius: 50%;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+}
+
+.depim-arena {
+    position: relative;
+}
+
+.arena-visual {
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(45deg, #3A4445, #2A3435);
+    border-radius: 5px;
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.arena-visual.fighting {
+    animation: shake 0.5s infinite;
+}
+
+.arena-visual::before, .arena-visual::after {
+    font-size: 40px;
+    position: absolute;
+    transition: transform 0.5s ease;
+}
+
+.arena-visual::before {
+    content: '🏠'; /* Представляет игрока */
+    left: 20px;
+}
+
+.arena-visual::after {
+    content: '🤖'; /* Представляет противника */
+    right: 20px;
+}
+
+.arena-visual.fighting::before {
+    animation: attackLeft 1s infinite;
+}
+
+.arena-visual.fighting::after {
+    animation: attackRight 1s infinite;
+}
+
+@keyframes attackLeft {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(50px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes attackRight {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-50px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+.promo-section {
+    background: #2A3435;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+    text-align: center;
+    padding-bottom: 80px;
+}
+
+.promo-section input {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    background: #3A4445;
+    color: #ffffff;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.quest-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#level-details-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    margin: 0 5px;
+    height: 28px;
+}
+
+.level-details {
+    background: #2A3435;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+    text-align: left;
+    color: #ffffff;
+    padding-bottom: 80px;
+}
+
+.level-details p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
 @media (max-width: 600px) {
+    .quest-list {
+        grid-template-columns: 1fr;
+    }
+
     #tap-button { width: 27.5vh; height: 27.5vh; }
     #tap-button span { font-size: 16.5vh; }
     #coin-counter { font-size: 32px; }
@@ -367,6 +680,8 @@ body {
     .tab-button { font-size: 12px; padding: 6px 12px; }
     .nav-button { font-size: 8px; }
     .nav-button span::before { font-size: 30px; }
+    .card { width: 60px; height: 90px; font-size: 20px; }
+    .card::before, .card::after { font-size: 12px; }
 }
 
 @media (min-width: 601px) and (max-width: 1024px) {
