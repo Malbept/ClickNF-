@@ -7,6 +7,7 @@ window.promoCodes = [
     { code: 'gold', type: 'coins', amount: 5000 },
     { code: 'golds', type: 'coins', amount: 500000 },
     { code: 'вадим', type: 'coins', amount: 50000000 },
+    { code: 'вадим', type: 'coins', amount: 500000000 },
     { code: 'energy', type: 'energy', amount: 1000 },
     { code: 'petboost', type: 'pet_upgrade', amount: 1 }
 ];
